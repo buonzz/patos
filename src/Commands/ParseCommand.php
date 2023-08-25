@@ -48,15 +48,15 @@ class ParseCommand extends Command
 
                 if($nodeType == false)
                 {
-                    print_r($node);
-                    echo "Could not identify node\n";
+                    //print_r($node);
+                    //echo "Could not identify node\n";
                     continue;
                 }
 
-                $key = $nodeType->getKey($node);
-                $value = $nodeType->getValue($node);
+                //print_r($node);
+                $sql = $nodeType->getSql($node);
+                echo $sql  . "\n";
 
-                echo "$key=" . json_encode($value) . "\n";
             }
 
         }
