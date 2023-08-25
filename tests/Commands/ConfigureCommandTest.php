@@ -4,7 +4,7 @@
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-use Utilihub\Xinstall\Commands\ConfigureCommand;
+use Buonzz\Patos\Commands\ConfigureCommand;
 
 class ConfigureCommandTest extends \PHPUnit_Framework_TestCase
 {
