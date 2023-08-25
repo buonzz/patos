@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+
+if (!ini_get("auto_detect_line_endings")) {
+  ini_set("auto_detect_line_endings", '1');
+}
+
+$files = array(
+  __DIR__ . '/../../vendor/autoload.php',
+  __DIR__ . '/../../../../autoload.php',
+  __DIR__ . '/../../../autoload.php',
+  '../vendor/autoload.php',
+  'vendor/autoload.php',  
+);
+
+foreach ($files as $file) {
+    if (file_exists($file)) {
+        require $file;
+        define('COMPOSER_INSTALLED', 1);
+        break;
+    }
+}
+
+// check if autoloader is present
+if(!defined('COMPOSER_INSTALLED'))
+	die('Install Composer dependencies first, autoloader not found.');
+
+use Buonzz\Patos\Commands\ParseCommand;
+use Buonzz\Patos\Commands\MigrateCommand;
+use Symfony\Component\Console\Application;
+
+
+// boot up the application
+$application = new Application("Patos by Darwin Biler", "v1.0");
+
+$application->add(new ParseCommand);
+$application->add(new MigrateCommand);
+$application->run();
