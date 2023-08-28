@@ -3,7 +3,7 @@
 class ClassNode {
 
     public function identify($node){
-        // make sure this is an statement
+        // make sure this is a statement
         if(!$node instanceof \PhpParser\Node\Stmt\Class_)
             return false;
         return true;
