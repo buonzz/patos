@@ -52,11 +52,10 @@ class ParseCommand extends Command
 
             // 1. File
             $path_parts = pathinfo($file);
-            //echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
+            echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
 
 
             // 2. process statements
-            /*
             foreach($stmts as $node){
 
                 $nodeType = NodeTypeIdentifier::identify($node);
@@ -72,7 +71,6 @@ class ParseCommand extends Command
                 echo $sql  . "\n";
 
             }
-            */
 
             // 3. traverse all constants
             $constant_traverser = new NodeTraverser;

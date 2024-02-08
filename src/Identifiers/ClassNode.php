@@ -12,7 +12,8 @@ class ClassNode {
     public function getInfo($node){
         return [
             'name' => $node->name->name,
-            'line' => $node->getStartLine(),
+            'start_line' => $node->getStartLine(),
+            'end_line' => $node->getEndLine(),
             'extends' => $node->extends->parts[0]
         ];
     }
@@ -21,13 +22,13 @@ class ClassNode {
 
         $output = '';
         $info = $this->getInfo($node);
-        $output .= "INSERT INTO tbl_class(`name`, `extends`, `line`, `path`) VALUES('". $info['name'] . "','" . $info['extends'] ."','" .  $info['line'] . "', '".  $file . "');\n";
+        $output .= "INSERT INTO tbl_class(`name`, `extends`, `start_line`, `end_line`, `path`) VALUES('". $info['name'] . "','" . $info['extends'] ."','" .  $info['start_line'] . "', '".   $info['end_line'] . "'.'". $file . "');\n";
 
         foreach($node->stmts as $statement){
 
             // method name
             if(get_class($statement) == 'PhpParser\Node\Stmt\ClassMethod'){
-                $output .= "INSERT INTO tbl_method(`name`, `class`, `line`, `path`) VALUES('". $statement->name->name . "','" .  $info['name'] ."','" .  $statement->getStartLine() . "', '".  $file . "');\n";
+                $output .= "INSERT INTO tbl_method(`name`, `class`, `start_line`, `end_line`, `path`) VALUES('". $statement->name->name . "','" .  $info['name'] ."','" .  $statement->getStartLine() . "', '".   $statement->getEndLine() . "','" .  $file . "');\n";
             }
 
             // use of constant

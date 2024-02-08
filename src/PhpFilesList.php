@@ -13,7 +13,7 @@ class PhpFilesList {
                 $f = strtolower(array_pop($f));
 
                 if (in_array($f, ['php']))
-                    $result[] = $folder . $value; 
+                    $result[] = $folder . "/". $value; 
             } 
         } 
         
