@@ -49,8 +49,7 @@ class ParseCommand extends Command
 
             // 1. File
             $path_parts = pathinfo($file);
-            //echo $file . "\n";
-            //echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
+            echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
 
 
             foreach($stmts as $node){
@@ -59,13 +58,10 @@ class ParseCommand extends Command
 
                 if($nodeType == false)
                 {
-                    //print_r($node);
                     //echo "Could not identify node\n";
                     continue;
                 }
 
-                //print_r($node);
-                //return;
                 // 2. Get SQL of Node
                 $sql = $nodeType->getSql($node, $file);
                 echo $sql  . "\n";
