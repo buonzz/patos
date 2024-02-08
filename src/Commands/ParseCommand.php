@@ -47,6 +47,12 @@ class ParseCommand extends Command
 
             $stmts = FileParser::parse($file);
 
+            // 1. File
+            $path_parts = pathinfo($file);
+            //echo $file . "\n";
+            //echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
+
+
             foreach($stmts as $node){
 
                 $nodeType = NodeTypeIdentifier::identify($node);
@@ -59,7 +65,9 @@ class ParseCommand extends Command
                 }
 
                 //print_r($node);
-                $sql = $nodeType->getSql($node);
+                //return;
+                // 2. Get SQL of Node
+                $sql = $nodeType->getSql($node, $file);
                 echo $sql  . "\n";
 
             }
