@@ -10,10 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use PhpParser\NodeDumper;
+use PhpParser\{Node, NodeTraverser, NodeVisitorAbstract};
+
 use Buonzz\Patos\FileParser;
 use Buonzz\Patos\PhpFilesList;
 use Buonzz\Patos\NodeTypeIdentifier;
-use PhpParser\NodeDumper;
+use Buonzz\Patos\NodeVisitors\ConstantNodeVisitor;
 
 
 class ParseCommand extends Command
@@ -49,9 +52,11 @@ class ParseCommand extends Command
 
             // 1. File
             $path_parts = pathinfo($file);
-            echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
+            //echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
 
 
+            // 2. process statements
+            /*
             foreach($stmts as $node){
 
                 $nodeType = NodeTypeIdentifier::identify($node);
@@ -67,6 +72,15 @@ class ParseCommand extends Command
                 echo $sql  . "\n";
 
             }
+            */
+
+            // 3. traverse all constants
+            $constant_traverser = new NodeTraverser;
+            $constant_node_visitor = new ConstantNodeVisitor();
+            $constant_node_visitor->set_file($file);
+            $constant_traverser->addVisitor($constant_node_visitor);
+            $constant_traverser->traverse($stmts);
+            echo $constant_node_visitor->getSQL();
 
         }
         return;
