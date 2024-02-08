@@ -38,6 +38,11 @@ class ParseCommand extends Command
 
         $files = PhpFilesList::get($path);
 
+        if(count($files) <=0){
+            echo "No php files found inside $path\n";
+            return;
+        }
+
         foreach($files as $file){
 
             $stmts = FileParser::parse($file);

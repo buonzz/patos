@@ -15,5 +15,5 @@ composer install
 ## Run
 
 ```bash
-./bin/patos
+./bin/patos 
 ```
