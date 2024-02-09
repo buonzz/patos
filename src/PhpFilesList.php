@@ -3,21 +3,22 @@
 class PhpFilesList {
 
 	public static function get($folder){
-        $result = array(); 
-        $cdir = scandir($folder); 
-        foreach ($cdir as $key => $value) 
-        {  
-            if (!is_dir($folder . DIRECTORY_SEPARATOR . $value)) 
-            { 
-                $f = explode('.', $value);
-                $f = strtolower(array_pop($f));
 
-                if (in_array($f, ['php']))
-                    $result[] = $folder . "/". $value; 
-            } 
-        } 
-        
-        return $result; 
+		$output = array();
+		$it = new \RecursiveDirectoryIterator($folder);
+		$display = array( 'php');
+		
+		foreach(new \RecursiveIteratorIterator($it) as $file)
+		{
+			$f = explode('.', $file);
+			$f = strtolower(array_pop($f));
+	
+		    if (in_array($f, $display))
+		        $output[] = $file;
+		}
+
+		return $output;
+
 	}
 
 }
