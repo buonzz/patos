@@ -17,7 +17,7 @@ use Buonzz\Patos\FileParser;
 use Buonzz\Patos\PhpFilesList;
 use Buonzz\Patos\NodeTypeIdentifier;
 use Buonzz\Patos\NodeVisitors\ConstantNodeVisitor;
-
+use Buonzz\Patos\NodeVisitors\FunctionNodeVisitor;
 
 class ParseCommand extends Command
 {
@@ -55,7 +55,7 @@ class ParseCommand extends Command
             echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
 
 
-            // 2. process statements
+             //2. process statements
             foreach($stmts as $node){
 
                 $nodeType = NodeTypeIdentifier::identify($node);
@@ -80,6 +80,13 @@ class ParseCommand extends Command
             $constant_traverser->traverse($stmts);
             echo $constant_node_visitor->getSQL();
 
+            // 4. traverse all functions
+            $function_traverser = new NodeTraverser;
+            $function_node_visitor = new FunctionNodeVisitor();
+            $function_node_visitor->set_file($file);
+            $function_traverser->addVisitor($function_node_visitor);
+            $function_traverser->traverse($stmts);
+            echo $function_node_visitor->getSQL();
         }
         return;
     }

@@ -9,7 +9,7 @@ class NodeTypeIdentifier {
 	public static function identify($node){
 		$identifiers = [
 			//new AssignArrayKeyValue(),
-			//new TwoLevelArrayKeyValue(),
+			new TwoLevelArrayKeyValue(),
 			new ClassNode(),
 			new ConstantNode()
 		];
