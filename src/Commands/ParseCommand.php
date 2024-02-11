@@ -26,12 +26,20 @@ class ParseCommand extends Command
         $this
             ->setName('parse')
             ->setDescription('parse PHP codes given a directory')
-            ->addArgument('path', InputArgument::REQUIRED, 'Path to folder where you want to parse PHP files?');
+            ->addArgument('path', InputArgument::REQUIRED, 'Path to folder where you want to parse PHP files?')
+            ->addOption(
+                'relative',
+                'r',
+                InputOption::VALUE_OPTIONAL,
+                'Make the outputted path relative?',
+                true
+            );
     }
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $path = $input->getArgument('path');
+        $is_relative = $input->getOption('relative');
 
         if(!file_exists($path))
         {
@@ -49,10 +57,16 @@ class ParseCommand extends Command
         foreach($files as $file){
 
             $stmts = FileParser::parse($file);
+            
+            if($is_relative)
+                $file_path = str_replace($path , '', $file);
+            else
+                $file_path= $file;
 
             // 1. File
             $path_parts = pathinfo($file);
-            echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file . "');\n";
+
+            echo "INSERT INTO tbl_file(filename,path) VALUES('".$path_parts['filename'] . "','". $file_path . "');\n";
 
 
              //2. process statements
@@ -67,7 +81,7 @@ class ParseCommand extends Command
                 }
 
                 // 2. Get SQL of Node
-                $sql = $nodeType->getSql($node, $file);
+                $sql = $nodeType->getSql($node, $file_path);
                 echo $sql  . "\n";
 
             }
@@ -75,7 +89,7 @@ class ParseCommand extends Command
             // 3. traverse all constants
             $constant_traverser = new NodeTraverser;
             $constant_node_visitor = new ConstantNodeVisitor();
-            $constant_node_visitor->set_file($file);
+            $constant_node_visitor->set_file($file_path);
             $constant_traverser->addVisitor($constant_node_visitor);
             $constant_traverser->traverse($stmts);
             echo $constant_node_visitor->getSQL();
@@ -83,7 +97,7 @@ class ParseCommand extends Command
             // 4. traverse all functions
             $function_traverser = new NodeTraverser;
             $function_node_visitor = new FunctionNodeVisitor();
-            $function_node_visitor->set_file($file);
+            $function_node_visitor->set_file($file_path);
             $function_traverser->addVisitor($function_node_visitor);
             $function_traverser->traverse($stmts);
             echo $function_node_visitor->getSQL();
