@@ -80,6 +80,13 @@ class MigrateCommand extends Command
             `line` int unsigned DEFAULT NULL,
             `file` varchar(255) DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+            CREATE TABLE `tbl_key_values` (
+            `array_key` varchar(255) DEFAULT NULL,
+            `array_value` TEXT,
+            `line` int unsigned DEFAULT NULL,
+            `file` varchar(255) DEFAULT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
         SQL;
 
         foreach($sql as $item){
