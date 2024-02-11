@@ -33,6 +33,13 @@ class ParseCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Make the outputted path relative?',
                 true
+            )
+            ->addOption(
+                'exclude',
+                'e',
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Exclude path?',
+                ['application/third_party/', 'application/vendor', 'vendor/', 'application/core', 'application/logs', 'system/']
             );
     }
     
@@ -40,6 +47,7 @@ class ParseCommand extends Command
     {
         $path = $input->getArgument('path');
         $is_relative = $input->getOption('relative');
+        $excluded_folders = $input->getOption('exclude');
 
         if(!file_exists($path))
         {
@@ -56,10 +64,17 @@ class ParseCommand extends Command
 
         foreach($files as $file){
 
+            $relative_path = str_replace($path , '', $file);
+
+            foreach($excluded_folders as $excluded_folder){
+                if(strpos($relative_path, $excluded_folder) === 0)
+                    continue 2;
+            }
+
             $stmts = FileParser::parse($file);
             
             if($is_relative)
-                $file_path = str_replace($path , '', $file);
+                $file_path = $relative_path;
             else
                 $file_path= $file;
 
