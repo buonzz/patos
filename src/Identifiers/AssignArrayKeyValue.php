@@ -57,4 +57,12 @@ class AssignArrayKeyValue {
         else 
             return null;
     }
+
+    public function getSql($node, $file){
+
+        $output = '';
+        $output .= "INSERT INTO tbl_key_values(`array_key`, `array_value`, `file`) VALUES('". $this->getKey($node) . "','" . $this->getValue($node) ."','" . $file . "');";
+
+        return $output;
+    }
 }

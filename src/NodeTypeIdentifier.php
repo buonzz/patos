@@ -8,7 +8,7 @@ use Buonzz\Patos\Identifiers\ConstantNode;
 class NodeTypeIdentifier {
 	public static function identify($node){
 		$identifiers = [
-			//new AssignArrayKeyValue(),
+			new AssignArrayKeyValue(),
 			//new TwoLevelArrayKeyValue(),
 			new ClassNode(),
 			new ConstantNode()
