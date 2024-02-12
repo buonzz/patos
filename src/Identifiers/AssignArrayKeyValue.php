@@ -29,7 +29,7 @@ class AssignArrayKeyValue {
             return false;
 
         // make sure $node->expr->var->dim->value exists
-        if(!property_exists($node->expr->var->dim, 'value'))
+        if((is_object($node->expr->var->dim) || is_string($node->expr->var->dim)) && !property_exists($node->expr->var->dim, 'value'))
             return false;
 
         // make sure $node->expr->expr exists
